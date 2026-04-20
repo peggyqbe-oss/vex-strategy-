@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>VEX DIGITAL STRATEGY BOARD</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+body{background:#0a0e18;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;overflow:hidden;height:100vh;display:flex;flex-direction:column}
+.hdr{background:linear-gradient(90deg,#04101e,#0b1e3a);padding:8px 16px;border-bottom:2px solid #00bfff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hdr-t{font-size:.9rem;font-weight:900;letter-spacing:2px;color:#00bfff}
+.hdr-s{font-size:.58rem;color:#2a4060;margin-top:1px}
+.hdr-b{background:#00bfff12;border:1px solid #00bfff44;border-radius:20px;padding:3px 12px;font-size:.7rem;font-weight:700;color:#00bfff}
+.tabs{display:flex;background:#04101e;border-bottom:1px solid #0a2030;flex-shrink:0}
+.tb{flex:1;padding:9px;text-align:center;cursor:pointer;font-size:.78rem;font-weight:700;letter-spacing:1px;color:#1a3050;border-bottom:3px solid transparent;transition:all .2s}
+.tb.active{color:#00bfff;border-bottom-color:#00bfff}
+.body{display:flex;flex:1;overflow:hidden}
+.fw{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;background:#080c14;position:relative}
+.flbl{font-size:.58rem;color:#1a3050;letter-spacing:1px;margin-bottom:3px;text-transform:uppercase}
+#fc{display:block;touch-action:none;border-radius:4px;box-shadow:0 4px 24px #00000099}
+.side{width:200px;min-width:168px;background:#04101e;border-left:1px solid #0a2030;display:flex;flex-direction:column;overflow-y:auto}
+.ss{padding:10px;border-bottom:1px solid #0a2030}
+.st{font-size:.58rem;letter-spacing:1.5px;color:#1a3050;font-weight:700;margin-bottom:8px;text-transform:uppercase}
+.score-n{font-size:2rem;font-weight:900;color:#00bfff;text-align:center;line-height:1}
+.score-u{font-size:.56rem;color:#1a3050;text-align:center;margin-top:2px;letter-spacing:2px}
+.sb-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #080c14;font-size:.68rem}
+.sb-row span:last-child{font-weight:700;color:#00bfff}
+.sb-row.bon span:last-child{color:#f0a500}
+.ipins{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.ipin{width:30px;height:30px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.55rem;font-weight:700;border:2px solid transparent;transition:transform .12s,border .12s}
+.ipin:active{transform:scale(1.2)}
+.ipin.sel{border-color:#fff!important;box-shadow:0 0 8px #fff8}
+.ipin.red{background:radial-gradient(circle at 38% 35%,#ff9090,#cc2222)}
+.ipin.blue{background:radial-gradient(circle at 38% 35%,#80c8f0,#2266cc)}
+.ipin.orange{background:radial-gradient(circle at 38% 35%,#ffd080,#ee6600)}
+.ipin.green{background:radial-gradient(circle at 38% 35%,#80ee88,#22aa33)}
+.ibeam{height:20px;padding:0 8px;border-radius:3px;cursor:pointer;display:flex;align-items:center;font-size:.56rem;font-weight:700;border:2px solid transparent;margin-bottom:4px;background:#1a1a1a;color:#888;width:100%;letter-spacing:2px}
+.ibeam.sel{border-color:#fff!important}
+.btn-r{width:100%;padding:7px;background:#c0392b12;border:1px solid #c0392b44;color:#e74c3c;border-radius:5px;font-size:.68rem;font-weight:700;cursor:pointer}
+.btn-b{width:100%;padding:7px;background:#00bfff12;border:1px solid #00bfff44;color:#00bfff;border-radius:5px;font-size:.68rem;font-weight:700;cursor:pointer;margin-bottom:5px}
+.tool-row{display:flex;gap:5px;margin-bottom:7px}
+.tool-btn{flex:1;padding:7px 4px;border-radius:5px;font-size:.66rem;font-weight:700;cursor:pointer;text-align:center;background:#0a1a2a;border:1.5px solid #1a3050;color:#2a5070;transition:all .15s}
+.tool-btn.pen-on{background:#00bfff22;border-color:#00bfff;color:#00bfff}
+.tool-btn.era-on{background:#e74c3c22;border-color:#e74c3c;color:#e74c3c}
+.dcols{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap;align-items:center}
+.dcol{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:border .12s;flex-shrink:0}
+.dcol.sel{border-color:#fff!important;box-shadow:0 0 6px #fff9}
+.dw-row{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:.62rem;color:#2a4060}
+.dw-row input[type=range]{flex:1;height:4px;accent-color:#00bfff}
+#cmenu{position:fixed;background:#0a1e3a;border:1px solid #00bfff44;border-radius:10px;box-shadow:0 8px 32px #00000099;z-index:9999;display:none;overflow:hidden;min-width:128px}
+#cmenu.show{display:block}
+.ci{padding:10px 14px;font-size:.76rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px}
+.ci:hover{background:#00bfff18;color:#00bfff}
+.ci.del{color:#e74c3c}
+.ci.del:hover{background:#c0392b14}
+.rl{display:flex;justify-content:space-between;font-size:.64rem;padding:2px 0;color:#2a4060}
+.rl span:last-child{color:#00bfff;font-weight:700}
+.rl.bon span:last-child{color:#f0a500}
+.hint{font-size:.6rem;color:#1a3050;text-align:center;padding:6px;line-height:1.7}
+.sc-key{display:flex;align-items:center;gap:6px;font-size:.62rem;color:#2a4060;padding:2px 0}
+.sc-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+@media(max-width:680px){
+  .side{width:100%;min-width:unset;border-left:none;border-top:1px solid #0a2030;flex-direction:row;overflow-x:auto;overflow-y:hidden;max-height:200px}
+  .ss{min-width:148px;border-bottom:none;border-right:1px solid #0a2030}
+  .body{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <div class="hdr-t">⚡ VEX DIGITAL STRATEGY BOARD</div>
+    <div class="hdr-s">MIX &amp; MATCH 2025-2026 ｜ 9×7 CELLS ｜ 6699C</div>
+  </div>
+  <div class="hdr-b">🤖 6699C</div>
+</div>
+<div class="tabs">
+  <div class="tb active" onclick="switchField('tw')">🤝 TEAMWORK</div>
+  <div class="tb" onclick="switchField('sk')">🎯 SKILLS</div>
+</div>
+<div class="body">
+  <div class="fw">
+    <div class="flbl" id="flbl">TEAMWORK CHALLENGE</div>
+    <canvas id="fc"></canvas>
+  </div>
+  <div class="side">
+    <!-- Score -->
+    <div class="ss">
+      <div class="st">📊 Score</div>
+      <div class="score-n" id="sN">0</div>
+      <div class="score-u">POINTS</div>
+      <div style="margin-top:10px" id="sBD"></div>
+    </div>
+
+    <!-- Draw Tools -->
+    <div class="ss">
+      <div class="st">✏️ 繪圖工具</div>
+      <div class="tool-row">
+        <div class="tool-btn" id="btn-pen" onclick="toggleTool('draw')">✏️ 畫筆</div>
+        <div class="tool-btn" id="btn-era" onclick="toggleTool('erase')">🧹 消除</div>
+      </div>
+      <div class="dcols" id="dcols">
+        <div class="dcol sel" style="background:#e74c3c" onclick="setDC('#e74c3c',this)"></div>
+        <div class="dcol" style="background:#2980b9" onclick="setDC('#2980b9',this)"></div>
+        <div class="dcol" style="background:#f1c40f" onclick="setDC('#f1c40f',this)"></div>
+        <div class="dcol" style="background:#27ae60" onclick="setDC('#27ae60',this)"></div>
+        <div class="dcol" style="background:#ffffff" onclick="setDC('#ffffff',this)"></div>
+        <div class="dcol" style="background:#e67e22" onclick="setDC('#e67e22',this)"></div>
+        <div class="dcol" style="background:#9b59b6" onclick="setDC('#9b59b6',this)"></div>
+      </div>
+      <div class="dw-row">
+        粗細
+        <input type="range" id="dw-sz" min="2" max="14" value="3" oninput="drawW=+this.value">
+      </div>
+      <button class="btn-b" onclick="clearPaths()">🗑 清除所有路徑</button>
+    </div>
+
+    <!-- Import -->
+    <div class="ss">
+      <div class="st">📥 Import</div>
+      <div class="ipins">
+        <div class="ipin red"    onclick="toggleImp('pin','red')"    id="i_pin_red"    title="紅色 Pin">P</div>
+        <div class="ipin blue"   onclick="toggleImp('pin','blue')"   id="i_pin_blue"   title="藍色 Pin">P</div>
+        <div class="ipin orange" onclick="toggleImp('pin','orange')" id="i_pin_orange" title="橙色 Pin">P</div>
+      </div>
+      <div class="ibeam" onclick="toggleImp('beam','gray')" id="i_beam_gray">━━ BEAM (×10)</div>
+    </div>
+    <div class="ss">
+      <button class="btn-r" onclick="resetField()">↺ RESET FIELD</button>
+    </div>
+
+    <!-- Rules -->
+    <div class="ss">
+      <div class="st">📖 計分規則 (SC3-SC6)</div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">每個Connected Pin</span><span>+1</span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">每個Connected Beam</span><span>+10</span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">─ SC4 顏色加成（每Stack）─</span><span></span></div>
+      <div class="rl bon"><span>2色Stack (Beam=gray)</span><span>+5</span></div>
+      <div class="rl bon"><span>3色Stack (Beam=gray)</span><span>+15</span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">─ SC5 Standoff（每Stack）─</span><span></span></div>
+      <div class="rl bon"><span>Stack on Standoff Goal</span><span>+10</span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">─ SC6 Matching Goal（每Stack）─</span><span></span></div>
+      <div class="rl bon"><span>Stack Connected to Beam</span><span>+10</span></div>
+      <div class="rl bon"><span>Stack in Goal (色符底PIN)</span><span>+10</span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">Beam每臂=獨立Stack (max 3)</span><span></span></div>
+      <div class="rl"><span style="color:#888;font-size:.58rem">單獨PIN(&lt;2)/Beam不得分</span><span></span></div>
+    </div>
+    <div class="ss">
+      <div class="st">🎨 疊的圖示說明</div>
+      <div class="sc-key"><div class="sc-dot" style="background:#3a1a5a"></div>同色疊</div>
+      <div class="sc-key"><div class="sc-dot" style="background:#8b4e00"></div>雙色疊 (+5)</div>
+      <div class="sc-key"><div class="sc-dot" style="background:#1a6b2a"></div>三色疊 (+15)</div>
+      <div class="sc-key"><div class="sc-dot" style="background:#1a3a7a"></div>含 Beam</div>
+    </div>
+    <div class="ss">
+      <div class="hint">📌 拖到旁邊 → 自動堆疊<br>點選 → 選單（拆解/移除）<br>🏗 含Beam點選 → 莖部PIN±<br>（高塔Y：莖部+1；平地Y：莖部0）<br>✏️ 畫筆規劃路徑</div>
+    </div>
+  </div>
+</div>
+<div id="cmenu">
+  <div class="ci" id="ci-comb" onclick="doAction('combine')" style="display:none">🔗 組合</div>
+  <div class="ci" id="ci-split" onclick="doAction('split')" style="display:none">✂️ 拆解</div>
+  <div class="ci" id="ci-stem-add" onclick="doAction('stemAdd')" style="display:none">⬇️ 莖部 PIN +1</div>
+  <div class="ci" id="ci-stem-sub" onclick="doAction('stemSub')" style="display:none">⬆️ 莖部 PIN −1</div>
+  <div id="ci-pin-colors"></div>
+  <div class="ci del" onclick="doAction('delete')">🗑️ 移除</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// VEX IQ Mix & Match 2025-2026 Field Data
+// Field: COLS=8, ROWS=6 interior grid lines (8 vertical × 6 horizontal)
+// Outer half-cells (CELL/2 wide) at all 4 edges = total 9×7 apparent cells
+// Pins: 10 Red · 10 Blue · 16 Orange
+//   Starting on field: 1 red preload + 3 red field = 4 red
+//                      1 blue preload + 3 blue field = 4 blue
+//                      16 orange (all pre-placed)
+//   Remaining 6 red + 6 blue delivered by human loaders
+// Beams: gray (wildcard color)
+// Goals: Blue SQ (top-left) · Red SQ (top-right)
+//        Red TRI (bottom-left) · Blue TRI (bottom-right)
+//        Standoff (center)
+// ═══════════════════════════════════════════════════════
+const FD = {
+  tw_pins:[
+    // ── Top wall preload pins (Starting Pin Supports on far wall)
+    // OPPOSITE color of adjacent goal: Blue SQ top-left → RED; Red SQ top-right → BLUE
+    // Position: col 3 (Red) and col 6 (Blue) per Appendix A5; r=-1 = top wall
+    [3,-1,'red'],
+    [6,-1,'blue'],
+    // ── Bottom wall preload pins (Starting Pin Supports on audience near wall)
+    // OPPOSITE color of adjacent goal: Red TRI bottom-left → BLUE; Blue TRI bottom-right → RED
+    // Position: col 4 (Blue) and col 5 (Red); r=ROWS=6 = bottom wall
+    [4,6,'blue'],
+    [5,6,'red'],
+    // ── Starting Red field pins (3) — left side per official field diagram
+    [3,0,'red'],
+    [1,2,'red'],
+    [1,4,'red'],
+    // ── Starting Blue field pins (3) — right side per official field diagram
+    [5,0,'blue'],
+    [7,2,'blue'],
+    [7,4,'blue'],
+    // ── Orange field pins (16, symmetric checkerboard grid)
+    [2,0,'orange'],[4,0,'orange'],[6,0,'orange'],
+    [1,1,'orange'],[3,1,'orange'],[5,1,'orange'],[7,1,'orange'],
+    [2,2,'orange'],[6,2,'orange'],
+    [1,3,'orange'],[3,3,'orange'],[5,3,'orange'],[7,3,'orange'],
+    [2,4,'orange'],[4,4,'orange'],[6,4,'orange'],
+  ],
+  tw_beams:[
+    // Beams: x=12.5" and x=48.5" from field edge per Appendix A4; row 1 = 2nd interior line
+    [2,1,'gray','h',1],
+    [6,1,'gray','h',1],
+  ],
+  sk_pins:[
+    // Skills: same field pin configuration as Teamwork per official game manual
+    [3,-1,'red'],
+    [6,-1,'blue'],
+    [4,6,'blue'],
+    [5,6,'red'],
+    [3,0,'red'],
+    [1,2,'red'],
+    [1,4,'red'],
+    [5,0,'blue'],
+    [7,2,'blue'],
+    [7,4,'blue'],
+    [2,0,'orange'],[4,0,'orange'],[6,0,'orange'],
+    [1,1,'orange'],[3,1,'orange'],[5,1,'orange'],[7,1,'orange'],
+    [2,2,'orange'],[6,2,'orange'],
+    [1,3,'orange'],[3,3,'orange'],[5,3,'orange'],[7,3,'orange'],
+    [2,4,'orange'],[4,4,'orange'],[6,4,'orange'],
+  ],
+  sk_beams:[
+    [2,1,'gray','h',1],
+    [6,1,'gray','h',1],
+  ]
+};
+
+// ═══════════════════════════════════════════════════════
+// CONSTANTS & STATE
+// ═══════════════════════════════════════════════════════
+const COLS=8, ROWS=6;
+const PAD=10;
+let CELL=80;
+
+const canvas=document.getElementById('fc');
+const ctx=canvas.getContext('2d');
+
+function gx(c){return c*CELL+CELL/2;}
+function gy(r){return r*CELL+CELL/2;}
+function FW(){return COLS*CELL;}
+function FH(){return ROWS*CELL;}
+function ip(i){return i*(CELL/12);}
+
+let field='tw', objs=[], uid=1;
+let nearId=null, ctxId=null, impMode=null;
+let pObj=null, isDrag=false, dOffX=0, dOffY=0, dSX=0, dSY=0;
+const DRAG_T=6;
+
+// Draw state
+let paths=[], curPath=null;
+let drawColor='#e74c3c', drawW=3;
+let drawMode=false, eraseMode=false;
+let erasePos=null;
+
+function mkId(){return uid++;}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+function initObjs(f){
+  objs=[];
+  const pins=f==='tw'?FD.tw_pins:FD.sk_pins;
+  const beams=f==='tw'?FD.tw_beams:FD.sk_beams;
+  pins.forEach(([c,r,col])=>{
+    const wall=(r<0||r>=ROWS);
+    const cy=r<0?0:r>=ROWS?FH():gy(r);
+    objs.push({id:mkId(),type:'pin',color:col,cx:gx(c),cy,members:[],wall});
+  });
+  beams.forEach(([c,r,col,ori,len])=>{
+    objs.push({id:mkId(),type:'beam',color:col,cx:gx(c),cy:gy(r),orient:ori,len,members:[]});
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// RESIZE
+// ═══════════════════════════════════════════════════════
+function fitCanvas(){
+  const fw=document.querySelector('.fw');
+  const aw=fw.clientWidth-12, ah=fw.clientHeight-22;
+  CELL=Math.min(Math.floor(aw/COLS),Math.floor(ah/ROWS),98);
+  canvas.width=FW(); canvas.height=FH();
+  canvas.style.width=FW()+'px'; canvas.style.height=FH()+'px';
+  initObjs(field);
+}
+
+// ═══════════════════════════════════════════════════════
+// GOALS
+// ═══════════════════════════════════════════════════════
+function getGoals(){
+  // VEX IQ Mix & Match official dimensions (Appendix A game manual):
+  // Square Goal: 5"×5" (127mm per side, A8)
+  // Triangle Goal: 9"×9" (228.6mm, A7)
+  // Standoff base: 11.85"×11.85" (300.99mm, A6) → floor goal radius ≈ 6"
+  const sq=ip(5), triL=ip(9), fl=ip(12);
+  const lw=Math.max(3,Math.floor(CELL/13));
+  const iL=lw+1, iT=lw+1;
+  const iR=FW()-lw-1, iB=FH()-lw-1;
+  const fcx=(gx(0)+gx(COLS-1))/2;
+  const fcy=(gy(0)+gy(ROWS-1))/2;
+  return [
+    {type:'sq',  x:iL,      y:iT,      w:sq,   h:sq,   color:'#2266cc',goal:'blue',lbl:'SQ'},
+    {type:'sq',  x:iR-sq,   y:iT,      w:sq,   h:sq,   color:'#cc2222',goal:'red', lbl:'SQ'},
+    {type:'tri', x:iL,      y:iB-triL, w:triL, h:triL, color:'#cc2222',goal:'red', corner:'BL'},
+    {type:'tri', x:iR-triL, y:iB-triL, w:triL, h:triL, color:'#2266cc',goal:'blue',corner:'BR'},
+    {type:'floor',cx:fcx,   cy:fcy,    r:fl/2, color:'#e08000',goal:'center'},
+  ];
+}
+
+function inGoal(o){
+  if(o.wall&&!o._drag) return null;
+  const cx=o.cx, cy=o.cy, hc=CELL/2;
+
+  // ── Floor goal (Standoff center): circle radius 0.75×CELL around field center
+  // Covers ~9 snap positions around the standoff mat
+  if(Math.hypot(cx-FW()/2, cy-FH()/2) < CELL*.75) return 'center';
+
+  // ── Triangle goals (bottom corners): 2 cols × 2 rows at each corner
+  // Red TRI (bottom-left): up to 4 snap positions (≤3 stacks per game rules)
+  if(cx<=gx(1)+hc && cy>=gy(ROWS-2)-hc) return 'red';
+  // Blue TRI (bottom-right)
+  if(cx>=gx(COLS-2)-hc && cy>=gy(ROWS-2)-hc) return 'blue';
+
+  // ── Square goals (top corners): 1 snap position each
+  // Blue SQ (top-left)
+  if(cx<=gx(0)+hc && cy<=gy(0)+hc) return 'blue';
+  // Red SQ (top-right)
+  if(cx>=gx(COLS-1)-hc && cy<=gy(0)+hc) return 'red';
+
+  return null;
+}
+
+// ═══════════════════════════════════════════════════════
+// SCORE
+// ═══════════════════════════════════════════════════════
+function allMembers(o){return [{type:o.type,color:o.color},...o.members];}
+
+function calcScore(){
+  // ── VEX IQ Mix & Match 2025-2026 Official Scoring (SC1-SC8) ──
+  //
+  // Key rules:
+  //   SC3c.iii: Each Pin directly connected to a Beam = separate Stack
+  //             (Beam counts as wildcard color in up to 3 stacks simultaneously)
+  //   SC4: 2-color Stack → +5; 3-color Stack → +15 (beam = gray wildcard)
+  //   SC5: Each Stack Placed on Standoff Goal → +10 per Stack
+  //   SC6b: Each Stack Connected to a Beam → +10 Matching Goal bonus per Stack
+  //   SC6a: Stack in colored goal with matching bottom pin → +10 (but SC6b already covers beam stacks)
+  //   Lone pin (<2 connected) or lone beam → 0 pts
+  //
+  // Tower Y (1 stem + beam + 4 cups, 2 colors per cup) on Standoff = 110pts:
+  //   3 stacks × (SC5+SC6b) = 3×20=60 + base 15 + SC4 (5+15+15)=35 → 110
+
+  let totalPins=0, totalBeams=0, totalBase=0;
+  let totalSC4=0, totalSC5=0, totalSC6=0;
+  let stackCount=0, yCount=0, yStandoff=0;
+
+  objs.forEach(o=>{
+    if(o.wall&&!o._drag) return;
+    const all=allMembers(o);
+    const ps=all.filter(m=>m.type==='pin');
+    const bs=all.filter(m=>m.type==='beam');
+
+    if(bs.length===0){
+      // ── Pure pin stack (no beam): score if ≥2 pins
+      if(ps.length<2) return;
+      totalPins+=ps.length;
+      totalBase+=ps.length;
+      stackCount++;
+      const pinCols=[...new Set(ps.map(p=>p.color))];
+      if(pinCols.length>=3)      totalSC4+=15;
+      else if(pinCols.length>=2) totalSC4+=5;
+      // SC6a: colored goal with matching bottom pin
+      const g=inGoal(o);
+      if(g){
+        const bottomColor=all[0].color; // root object = bottom pin
+        if(g==='center'){
+          totalSC5+=10; // SC5: Stack on Standoff Goal
+          // No SC6a for floor/standoff goal (color-matching bonus only for red/blue goals)
+        } else {
+          if(bottomColor===g) totalSC6+=10; // SC6a: bottom pin matches goal color
+        }
+      }
+      return;
+    }
+
+    // ── Y structure (beam + pins)
+    if(ps.length===0) return; // lone beam = 0
+    yCount++;
+    totalBeams+=bs.length;
+    totalBase+=bs.length*10;
+    totalPins+=ps.length;
+    totalBase+=ps.length;
+
+    const g=inGoal(o);
+    const isStandoff=(g==='center');
+    if(isStandoff) yStandoff++;
+
+    // Build the separate stacks per SC3c.iii
+    const stemCount=Math.min(o.stemCount||0, ps.length);
+    const stemPins=ps.slice(0,stemCount);
+    const armPins=ps.slice(stemCount);
+    const leftPins=armPins.filter((_,i)=>i%2===0);
+    const rightPins=armPins.filter((_,i)=>i%2===1);
+
+    const stacks=[];
+    if(stemPins.length>0) stacks.push(stemPins);
+    if(leftPins.length>0) stacks.push(leftPins);
+    if(rightPins.length>0) stacks.push(rightPins);
+    // Edge case: all pins but stemCount=0 and no left/right split needed
+    // (e.g. only 1 arm populated) — still treat as stacks above
+
+    stacks.forEach(stackPins=>{
+      stackCount++;
+      // SC4: pin colors in this arm + beam (gray) as wildcard
+      const pinCols=[...new Set(stackPins.map(p=>p.color))];
+      const effectiveCols=Math.min(3, pinCols.length+1); // +1 for beam
+      if(effectiveCols>=3)      totalSC4+=15;
+      else if(effectiveCols>=2) totalSC4+=5;
+      // SC6b: every beam-connected stack earns Matching Goal bonus
+      totalSC6+=10;
+      // SC5: each stack on Standoff Goal earns +10
+      if(isStandoff) totalSC5+=10;
+    });
+  });
+
+  const t=totalBase+totalSC4+totalSC5+totalSC6;
+  document.getElementById('sN').textContent=t;
+  let h='';
+  if(totalBeams) h+=`<div class="sb-row"><span>得分 Beam ×${totalBeams}</span><span>+${totalBeams*10}</span></div>`;
+  if(totalPins)  h+=`<div class="sb-row"><span>得分 Pin ×${totalPins}</span><span>+${totalPins}</span></div>`;
+  if(totalSC4)   h+=`<div class="sb-row bon"><span>SC4 顏色加成</span><span>+${totalSC4}</span></div>`;
+  if(totalSC6)   h+=`<div class="sb-row bon"><span>SC6 Beam/配色加成 ×${totalSC6/10}</span><span>+${totalSC6}</span></div>`;
+  if(totalSC5)   h+=`<div class="sb-row bon"><span>SC5 Standoff加成 ×${totalSC5/10}</span><span>+${totalSC5}</span></div>`;
+  if(stackCount) h+=`<div class="sb-row"><span>得分Stack數 (Y數)</span><span>${stackCount} (${yCount})</span></div>`;
+  if(t===0) h+='<div class="hint">組合 Beam+PIN 成Ｙ型，或堆疊≥2個PIN即可得分</div>';
+  document.getElementById('sBD').innerHTML=h;
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAW SCENE
+// ═══════════════════════════════════════════════════════
+function drawScene(){
+  ctx.clearRect(0,0,FW(),FH());
+  const lw=Math.max(3,Math.floor(CELL/13));
+  const tileW=CELL-lw;
+
+  // Background
+  ctx.fillStyle='#eeede8';
+  ctx.fillRect(0,0,FW(),FH());
+
+  // Tiles
+  for(let c=0;c<COLS-1;c++){
+    for(let r=0;r<ROWS-1;r++){
+      const tx=gx(c)+lw/2, ty=gy(r)+lw/2;
+      ctx.fillStyle='#f2f1ec'; ctx.fillRect(tx,ty,tileW,tileW);
+      ctx.fillStyle='#d4d0c8';
+      const ds=tileW/5;
+      for(let dx=ds;dx<tileW;dx+=ds)
+        for(let dy=ds;dy<tileW;dy+=ds){
+          ctx.beginPath();ctx.arc(tx+dx,ty+dy,1,0,Math.PI*2);ctx.fill();
+        }
+    }
+  }
+
+  // Grid lines: all 8 vertical × 6 horizontal (COLS=8, ROWS=6)
+  ctx.fillStyle='#111';
+  for(let c=0;c<COLS;c++) ctx.fillRect(gx(c)-lw/2,0,lw,FH());
+  for(let r=0;r<ROWS;r++) ctx.fillRect(0,gy(r)-lw/2,FW(),lw);
+
+  // Border (field wall at canvas edge)
+  ctx.strokeStyle='#666';ctx.lineWidth=2;
+  ctx.strokeRect(1,1,FW()-2,FH()-2);
+
+  drawWallBrackets();
+  drawLoadingStations();
+  drawGoals3D();
+  if(field==='sk') drawRobotStart();
+  if(field==='tw') drawTWRobots();
+
+  // Objects
+  const sorted=[...objs].sort((a,b)=>{
+    if(a._drag&&!b._drag) return 1;
+    if(!a._drag&&b._drag) return -1;
+    return a.type==='beam'?-1:1;
+  });
+  sorted.forEach(o=>drawObj(o));
+
+  // Zone indicators on top of objects (線內dot)
+  drawZoneIndicators();
+
+  // Paths on top
+  renderPaths();
+
+  // Erase cursor
+  if(eraseMode&&erasePos){
+    const R=Math.max(14,CELL*.22);
+    ctx.save();
+    ctx.strokeStyle='rgba(231,76,60,.9)';ctx.lineWidth=2;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.arc(erasePos.x,erasePos.y,R,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(231,76,60,.1)';
+    ctx.beginPath();ctx.arc(erasePos.x,erasePos.y,R,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// PATHS RENDERING
+// ═══════════════════════════════════════════════════════
+function drawRobotShape(x,y,ang,col,sz){
+  // Top-down robot silhouette (VEX IQ robot style)
+  // ang = facing direction (radians), sz = size scale
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate(ang);
+  const W=sz, H=sz*1.4;  // width, length
+  const wW=sz*.25, wH=sz*.38; // wheel width, height
+  // Drop shadow
+  ctx.fillStyle='rgba(0,0,0,.25)';
+  ctx.fillRect(-W/2+3,-H/2+3,W,H);
+  // Body
+  const bg=ctx.createLinearGradient(-W/2,-H/2,W/2,H/2);
+  bg.addColorStop(0,col+'ff');bg.addColorStop(1,col+'88');
+  ctx.fillStyle=bg;
+  ctx.strokeStyle=col;ctx.lineWidth=1.5;
+  ctx.beginPath();
+  // Slightly rounded rect for body
+  const r=sz*.12;
+  ctx.moveTo(-W/2+r,-H/2);ctx.lineTo(W/2-r,-H/2);ctx.arcTo(W/2,-H/2,W/2,-H/2+r,r);
+  ctx.lineTo(W/2,H/2-r);ctx.arcTo(W/2,H/2,W/2-r,H/2,r);
+  ctx.lineTo(-W/2+r,H/2);ctx.arcTo(-W/2,H/2,-W/2,H/2-r,r);
+  ctx.lineTo(-W/2,-H/2+r);ctx.arcTo(-W/2,-H/2,-W/2+r,-H/2,r);
+  ctx.closePath();ctx.fill();ctx.stroke();
+  // Front indicator (brighter stripe at front = -H/2 side)
+  ctx.fillStyle='rgba(255,255,255,.35)';
+  ctx.fillRect(-W/2+2,-H/2+2,W-4,H*.2);
+  // 4 wheels (corners)
+  ctx.fillStyle='#111';ctx.strokeStyle='#444';ctx.lineWidth=1;
+  [[-W/2-wW*.5,-H/2+sz*.06],[W/2-wW*.5,-H/2+sz*.06],
+   [-W/2-wW*.5, H/2-sz*.06-wH],[W/2-wW*.5, H/2-sz*.06-wH]].forEach(([wx,wy])=>{
+    ctx.beginPath();ctx.roundRect(wx,wy,wW,wH,2);ctx.fill();ctx.stroke();
+  });
+  // Direction arrow on front
+  ctx.fillStyle='rgba(255,255,255,.9)';
+  ctx.beginPath();
+  ctx.moveTo(0,-H/2+sz*.05);
+  ctx.lineTo( sz*.18,-H/2+sz*.28);
+  ctx.lineTo(-sz*.18,-H/2+sz*.28);
+  ctx.closePath();ctx.fill();
+  // Center cross detail
+  ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,-H*.3);ctx.lineTo(0,H*.3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-W*.3,0);ctx.lineTo(W*.3,0);ctx.stroke();
+  ctx.restore();
+}
+
+function renderPaths(){
+  ctx.save();
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  const all=curPath?[...paths,curPath]:paths;
+  all.forEach(p=>{
+    if(p.pts.length<2) return;
+    // Build smoothed path
+    ctx.beginPath();
+    ctx.moveTo(p.pts[0].x,p.pts[0].y);
+    for(let i=1;i<p.pts.length-1;i++){
+      const mx=(p.pts[i].x+p.pts[i+1].x)/2;
+      const my=(p.pts[i].y+p.pts[i+1].y)/2;
+      ctx.quadraticCurveTo(p.pts[i].x,p.pts[i].y,mx,my);
+    }
+    const last=p.pts[p.pts.length-1];
+    ctx.lineTo(last.x,last.y);
+    // Glow
+    ctx.strokeStyle=p.color+'44'; ctx.lineWidth=p.w*3.5; ctx.stroke();
+    // Dashed main line
+    ctx.setLineDash([6,4]);
+    ctx.strokeStyle=p.color+'cc'; ctx.lineWidth=p.w; ctx.stroke();
+    ctx.setLineDash([]);
+    // Starting dot (robot start position)
+    ctx.fillStyle=p.color+'99';
+    ctx.beginPath();ctx.arc(p.pts[0].x,p.pts[0].y,p.w*1.5,0,Math.PI*2);ctx.fill();
+    // Robot shape at end of path (showing destination & direction)
+    if(p.pts.length>=3){
+      const n=p.pts.length;
+      // Compute facing angle from last few points for stability
+      let dx=0,dy=0,samples=Math.min(5,n-1);
+      for(let i=n-samples;i<n;i++){dx+=p.pts[i].x-p.pts[i-1].x;dy+=p.pts[i].y-p.pts[i-1].y;}
+      const ang=Math.atan2(dy,dx)+Math.PI/2; // +90° because robot "front" is -Y in local space
+      const sz=Math.max(CELL*.28, p.w*5);
+      drawRobotShape(last.x,last.y,ang,p.color,sz);
+    }
+  });
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAW TOOLS
+// ═══════════════════════════════════════════════════════
+function toggleTool(mode){
+  if(mode==='draw'){
+    drawMode=!drawMode;
+    if(drawMode) eraseMode=false;
+  } else {
+    eraseMode=!eraseMode;
+    if(eraseMode) drawMode=false;
+  }
+  impMode=null;
+  document.querySelectorAll('.ipin,.ibeam').forEach(el=>el.classList.remove('sel'));
+  document.getElementById('btn-pen').className='tool-btn'+(drawMode?' pen-on':'');
+  document.getElementById('btn-era').className='tool-btn'+(eraseMode?' era-on':'');
+  canvas.style.cursor=drawMode?'crosshair':eraseMode?'none':'default';
+  drawScene();
+}
+
+function setDC(col,el){
+  drawColor=col;
+  document.querySelectorAll('.dcol').forEach(d=>d.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function clearPaths(){
+  paths=[];curPath=null;drawScene();
+}
+
+function eraseAtPoint(x,y){
+  const R=Math.max(14,CELL*.22);
+  paths=paths.filter(p=>{
+    return !p.pts.some(pt=>Math.hypot(pt.x-x,pt.y-y)<R);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// SKILLS ROBOT START POSITION (bottom-left = Red Triangle Goal)
+// ═══════════════════════════════════════════════════════
+function drawRobotStart(){
+  const x=gx(0)+CELL*.08, y=gy(ROWS-1)-CELL*.08;
+  const sz=Math.max(22,CELL*.55);
+  ctx.save();
+  // Start zone highlight
+  ctx.fillStyle='rgba(200,50,50,.12)';
+  ctx.strokeStyle='rgba(200,50,50,.7)';
+  ctx.lineWidth=2;
+  ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  ctx.rect(gx(0)+2,gy(ROWS-1)-CELL+2,CELL-4,CELL-4);
+  ctx.fill();ctx.stroke();
+  ctx.setLineDash([]);
+  // Robot icon
+  ctx.fillStyle='rgba(200,50,50,.85)';
+  ctx.font=`bold ${Math.max(10,CELL*.2)}px sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('🤖',gx(0)+CELL/2,gy(ROWS-1)-CELL/2);
+  // Label
+  ctx.fillStyle='rgba(200,50,50,.9)';
+  ctx.font=`bold ${Math.max(7,CELL*.1)}px sans-serif`;
+  ctx.fillText('START',gx(0)+CELL/2,gy(ROWS-1)-CELL*.12);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  ctx.restore();
+}
+
+// Teamwork: show both alliance robots' start zones
+function drawTWRobots(){
+  const zones=[
+    {x:gx(0),y:gy(ROWS-1)-CELL,label:'🤖 R1',c:'rgba(200,50,50,.75)'},  // Red Triangle bottom-left
+    {x:gx(COLS-1)-CELL,y:gy(ROWS-1)-CELL,label:'🤖 R2',c:'rgba(34,102,204,.75)'},  // Blue Triangle bottom-right
+  ];
+  ctx.save();
+  zones.forEach(z=>{
+    ctx.fillStyle=z.c.replace('.75','.09');
+    ctx.strokeStyle=z.c;
+    ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.rect(z.x+2,z.y+2,CELL-4,CELL-4);ctx.fill();ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle=z.c;
+    ctx.font=`${Math.max(8,CELL*.14)}px sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(z.label.split(' ')[0],z.x+CELL/2,z.y+CELL/2-3);
+    ctx.font=`bold ${Math.max(6,CELL*.085)}px sans-serif`;
+    ctx.fillText(z.label.split(' ')[1],z.x+CELL/2,z.y+CELL*.75);
+  });
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════
+// LOADING STATIONS (left & right side walls, each has 1 red + 1 blue bar)
+// ═══════════════════════════════════════════════════════
+function drawLoadingStations(){
+  const barW=Math.max(6,CELL*.38);
+  const barH=Math.max(4,CELL*.1);
+  const cy=FH()/2;
+  const halfC=CELL/2;
+
+  // Left wall: Red loading station
+  ctx.fillStyle='#cc3322';
+  ctx.beginPath();
+  ctx.roundRect(halfC/2-barW/2, cy-barH/2, barW, barH, 2);
+  ctx.fill();
+  ctx.strokeStyle='#882200';ctx.lineWidth=1;ctx.stroke();
+
+  // Right wall: Blue loading station
+  ctx.fillStyle='#2255cc';
+  ctx.beginPath();
+  ctx.roundRect(FW()-halfC/2-barW/2, cy-barH/2, barW, barH, 2);
+  ctx.fill();
+  ctx.strokeStyle='#0a3060';ctx.lineWidth=1;ctx.stroke();
+}
+
+// ═══════════════════════════════════════════════════════
+// WALL BRACKETS
+// ═══════════════════════════════════════════════════════
+function drawWallBrackets(){
+  objs.forEach(o=>{
+    if(!o.wall||o._drag) return;
+    const isTop=(o.cy<gy(0));
+    const isBot=(o.cy>gy(ROWS-1));
+    if(!isTop&&!isBot) return;
+    const bW=Math.max(10,CELL*.2), bH=Math.max(6,CELL*.09);
+    // Bracket sits at canvas edge; pin is at CELL/4 from wall in outer half-cell
+    const pinY=isTop?CELL/4:FH()-CELL/4;
+    const bY=isTop?0:FH()-bH;
+    const bYc=Math.max(0,Math.min(FH()-bH,bY));
+    const bg=ctx.createLinearGradient(o.cx-bW/2,bYc,o.cx+bW/2,bYc+bH);
+    bg.addColorStop(0,'#999');bg.addColorStop(0.5,'#666');bg.addColorStop(1,'#444');
+    ctx.fillStyle=bg; ctx.fillRect(o.cx-bW/2,bYc,bW,bH);
+    ctx.strokeStyle='#333';ctx.lineWidth=1;ctx.strokeRect(o.cx-bW/2,bYc,bW,bH);
+    ctx.fillStyle='rgba(0,0,0,.5)';
+    ctx.beginPath();ctx.arc(o.cx-bW*.3,bYc+bH/2,1.8,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(o.cx+bW*.3,bYc+bH/2,1.8,0,Math.PI*2);ctx.fill();
+    // Connecting rod from bracket to pin
+    ctx.strokeStyle='#777';ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.moveTo(o.cx, isTop?bYc+bH:bYc);
+    ctx.lineTo(o.cx, pinY);
+    ctx.stroke();
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// 3D GOALS
+// ═══════════════════════════════════════════════════════
+function lighten(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return '#'+[Math.min(255,r+Math.round((255-r)*a)),Math.min(255,g+Math.round((255-g)*a)),Math.min(255,b+Math.round((255-b)*a))].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function darken(hex,a){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return '#'+[Math.max(0,Math.round(r*(1-a))),Math.max(0,Math.round(g*(1-a))),Math.max(0,Math.round(b*(1-a)))].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+function drawGoals3D(){
+  for(const g of getGoals()){
+    if(g.type==='sq')    draw3DSquareGoal(g);
+    else if(g.type==='tri')   draw3DTriangleGoal(g);
+    else if(g.type==='floor') draw3DFloorGoal(g);
+    else if(g.type==='ls')    draw3DLoadingStation(g);
+  }
+  // Scoring zone boundary overlays (線內線外 zone markers)
+  drawScoringZones();
+}
+
+// Draw dashed zone boundary lines (called before objects)
+function drawScoringZones(){
+  ctx.save();
+  // Highlight zone if dragging object is over it
+  const dragObj=pObj&&isDrag?pObj:null;
+  const dragGoal=dragObj?inGoal(dragObj):null;
+
+  for(const g of getGoals()){
+    if(!g.goal||g.type==='ls') continue;
+    const isHover=(dragGoal&&(
+      (g.type==='floor'&&dragGoal==='center')||
+      (g.type!=='floor'&&dragGoal===g.goal)
+    ));
+    const rc=g.goal==='red'?'255,80,80':g.goal==='blue'?'80,160,255':'255,200,0';
+    const alpha=isHover?0.95:0.65;
+    ctx.strokeStyle=`rgba(${rc},${alpha})`;
+    ctx.lineWidth=isHover?3:2;
+    ctx.setLineDash(isHover?[]:[6,4]);
+
+    if(g.type==='floor'){
+      // Glow fill when hovered
+      if(isHover){
+        ctx.fillStyle=`rgba(${rc},0.12)`;
+        ctx.beginPath();ctx.arc(g.cx,g.cy,g.r,0,Math.PI*2);ctx.fill();
+      }
+      ctx.beginPath();ctx.arc(g.cx,g.cy,g.r,0,Math.PI*2);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=`rgba(${rc},${isHover?0.9:0.6})`;
+      ctx.font=`bold ${Math.max(7,CELL*.075)}px sans-serif`;
+      ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.fillText(isHover?'★ 得分區':'線內+10',g.cx,g.cy+g.r+3);
+    } else if(g.type==='sq'){
+      const pad=CELL*.05;
+      if(isHover){
+        ctx.fillStyle=`rgba(${rc},0.12)`;
+        ctx.fillRect(g.x-pad,g.y-pad,g.w+pad*2,g.h+pad*2);
+      }
+      ctx.strokeRect(g.x-pad,g.y-pad,g.w+pad*2,g.h+pad*2);
+    } else if(g.type==='tri'){
+      const {x,y,w,h,corner}=g;
+      if(isHover){
+        ctx.fillStyle=`rgba(${rc},0.12)`;
+        ctx.beginPath();
+        if(corner==='BL'){ctx.moveTo(x,y+h);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y);}
+        else             {ctx.moveTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x+w,y);}
+        ctx.closePath();ctx.fill();
+      }
+      ctx.beginPath();
+      if(corner==='BL'){ctx.moveTo(x,y+h);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y);}
+      else             {ctx.moveTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.lineTo(x+w,y);}
+      ctx.closePath();ctx.stroke();
+    }
+  }
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+// Show colored dot on objects that are inside a scoring zone (called after objects)
+function drawZoneIndicators(){
+  const dotR=Math.max(3,CELL*.042);
+  const dotOff=Math.max(8,CELL*.12);
+  objs.forEach(o=>{
+    if(o.wall&&!o._drag) return;
+    const g=inGoal(o);
+    if(!g) return;
+    const dotC=g==='center'?'#ffc800':g==='red'?'#ff5050':'#50a0ff';
+    ctx.save();
+    ctx.fillStyle=dotC;
+    ctx.beginPath();ctx.arc(o.cx+dotOff,o.cy-dotOff,dotR,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=.8;
+    ctx.beginPath();ctx.arc(o.cx+dotOff,o.cy-dotOff,dotR,0,Math.PI*2);ctx.stroke();
+    ctx.restore();
+  });
+}
+
+function draw3DSquareGoal(g){
+  const {x,y,w,h,color}=g;
+  const bw=Math.max(3,w*0.18),depth=bw*0.8;
+  ctx.fillStyle=color+'44';
+  [[x,y,w,bw],[x,y+h-bw,w,bw],[x,y,bw,h],[x+w-bw,y,bw,h]].forEach(([rx,ry,rw,rh])=>ctx.fillRect(rx+depth,ry+depth,rw,rh));
+  ctx.fillStyle=color+'10';ctx.fillRect(x+bw,y+bw,w-bw*2,h-bw*2);
+  ctx.strokeStyle=color+'44';ctx.lineWidth=.5;ctx.strokeRect(x+bw,y+bw,w-bw*2,h-bw*2);
+  const bg=ctx.createLinearGradient(x,y,x,y+h);
+  bg.addColorStop(0,lighten(color,.5));bg.addColorStop(.4,color);bg.addColorStop(1,darken(color,.4));
+  ctx.fillStyle=bg;
+  [[x,y,w,bw],[x,y+h-bw,w,bw],[x,y,bw,h],[x+w-bw,y,bw,h]].forEach(([rx,ry,rw,rh])=>ctx.fillRect(rx,ry,rw,rh));
+  ctx.fillStyle='rgba(0,0,0,.25)';
+  const hs=bw*1.4;
+  for(let hx=x+bw*.7;hx<x+w-bw;hx+=hs){ctx.beginPath();ctx.arc(hx,y+bw/2,bw*.22,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(hx,y+h-bw/2,bw*.22,0,Math.PI*2);ctx.fill();}
+  for(let hy=y+bw*.7;hy<y+h-bw;hy+=hs){ctx.beginPath();ctx.arc(x+bw/2,hy,bw*.22,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(x+w-bw/2,hy,bw*.22,0,Math.PI*2);ctx.fill();}
+  ctx.fillStyle=darken(color,.2);
+  [[x,y],[x+w-bw,y],[x,y+h-bw],[x+w-bw,y+h-bw]].forEach(([cx2,cy2])=>ctx.fillRect(cx2,cy2,bw,bw));
+  ctx.fillStyle='rgba(255,255,255,.3)';
+  [[x,y],[x+w-bw,y]].forEach(([cx2,cy2])=>ctx.fillRect(cx2,cy2,bw,bw*.3));
+  ctx.fillStyle=color+'cc';ctx.font='bold '+Math.max(5,w*.15)+'px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(g.lbl,x+w/2,y+h/2);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+}
+
+function draw3DTriangleGoal(g){
+  const {x,y,w,h,color,corner}=g;
+  const bw=Math.max(3,w*.09),depth=bw*.7;
+  const v=corner==='BL'?[{x,y:y+h},{x:x+w,y:y+h},{x,y}]:[{x:x+w,y:y+h},{x,y:y+h},{x:x+w,y}];
+  ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);
+  ctx.closePath();ctx.fillStyle=color+'0f';ctx.fill();
+  ctx.save();ctx.translate(depth,depth);
+  ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.lineTo(v[2].x,v[2].y);
+  ctx.closePath();ctx.strokeStyle=color+'33';ctx.lineWidth=bw*1.8;ctx.stroke();ctx.restore();
+  ctx.lineCap='round';ctx.strokeStyle=color+'cc';ctx.lineWidth=bw*2;
+  for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(v[i].x,v[i].y);ctx.lineTo(v[(i+1)%3].x,v[(i+1)%3].y);ctx.stroke();}
+  ctx.strokeStyle=lighten(color,.5)+'99';ctx.lineWidth=bw*.5;
+  ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[1].x,v[1].y);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(v[0].x,v[0].y);ctx.lineTo(v[2].x,v[2].y);ctx.stroke();
+  ctx.fillStyle=darken(color,.2);
+  v.forEach(vc=>{ctx.beginPath();ctx.arc(vc.x,vc.y,bw*1.1,0,Math.PI*2);ctx.fill();});
+  ctx.lineCap='butt';ctx.lineWidth=1;
+}
+
+function draw3DFloorGoal(g){
+  const {cx,cy,r,color}=g;
+  const s=r*2,x=cx-r,y=cy-r,dep=r*.1;
+  ctx.fillStyle='rgba(0,0,0,.3)';ctx.fillRect(x+dep*2,y+dep*2,s,s);
+  const pg=ctx.createLinearGradient(x,y,x,y+s);
+  pg.addColorStop(0,'#ffb830');pg.addColorStop(.5,'#e09500');pg.addColorStop(1,'#b07000');
+  ctx.fillStyle=pg;ctx.fillRect(x,y,s,s);
+  ctx.fillStyle='#a06000';ctx.fillRect(x+dep,y+s,s-dep,dep*2);
+  ctx.fillStyle='#906000';ctx.fillRect(x+s,y+dep,dep*2,s-dep);
+  ctx.strokeStyle='#d08000';ctx.lineWidth=2;ctx.strokeRect(x,y,s,s);
+  // Tower
+  const hubR=s*.16,tH=s*.22;
+  const tg=ctx.createLinearGradient(cx-hubR,cy-tH,cx+hubR,cy);
+  tg.addColorStop(0,'#ffd040');tg.addColorStop(.4,'#e09500');tg.addColorStop(1,'#906000');
+  ctx.fillStyle=tg;ctx.fillRect(cx-hubR,cy-tH,hubR*2,tH+hubR*.4);
+  ctx.fillStyle='#906000';
+  ctx.beginPath();ctx.ellipse(cx,cy+hubR*.4,hubR,hubR*.35,0,0,Math.PI*2);ctx.fill();
+  const tg2=ctx.createRadialGradient(cx-hubR*.3,cy-tH,2,cx,cy-tH,hubR);
+  tg2.addColorStop(0,'#ffdd60');tg2.addColorStop(.6,'#e09500');tg2.addColorStop(1,'#906000');
+  ctx.fillStyle=tg2;
+  ctx.beginPath();ctx.ellipse(cx,cy-tH,hubR,hubR*.35,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#c07000';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.ellipse(cx,cy-tH,hubR,hubR*.35,0,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold '+Math.max(5,s*.065)+'px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('STANDOFF',cx,y+s*.93);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+}
+
+function draw3DLoadingStation(g){
+  const {x,y,w,h,color}=g;
+  const depth=w*.6;
+  ctx.fillStyle='rgba(0,0,0,.3)';ctx.fillRect(x+depth,y+depth,w,h);
+  ctx.fillStyle=darken(color,.3);ctx.fillRect(x,y,w,h);
+  const fg=ctx.createLinearGradient(x,y,x,y+h);
+  fg.addColorStop(0,lighten(color,.4));fg.addColorStop(.5,color);fg.addColorStop(1,darken(color,.3));
+  ctx.fillStyle=fg;ctx.fillRect(x,y,w,h);
+  ctx.strokeStyle=color;ctx.lineWidth=1;ctx.strokeRect(x,y,w,h);
+  ctx.fillStyle='rgba(0,0,0,.4)';
+  for(let i=0;i<4;i++){ctx.fillRect(x+w*.2,y+h*(.12+i*.22),w*.6,h*.15);}
+  ctx.save();ctx.translate(x+w/2,y+h/2);ctx.rotate(-Math.PI/2);
+  ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='bold 7px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('LS',0,0);ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════════
+// OBJECT DRAW (PIN / BEAM / GROUP)
+// ═══════════════════════════════════════════════════════
+const PC={
+  red:   {b:'#cc2222',g:'#ff9090',d:'#880000'},
+  blue:  {b:'#2266cc',g:'#80c8f0',d:'#0a3060'},
+  orange:{b:'#dd5500',g:'#ffcc66',d:'#882200'},
+  green: {b:'#22aa33',g:'#88ee88',d:'#0a4414'},
+  gray:  {b:'#555',   g:'#aaa',   d:'#222'},
+};
+
+function drawObj(o){
+  ctx.save();
+  if(o._drag){ctx.shadowColor='#00bfff';ctx.shadowBlur=18;ctx.globalAlpha=.86;}
+  if(!o._drag&&nearId===o.id){ctx.shadowColor='#f0a500';ctx.shadowBlur=22;}
+  const all=allMembers(o);
+  let dx=o.cx, dy=o.cy;
+
+  // Wall pins: draw in outer half-cell region (between canvas edge and first/last interior line)
+  if(o.wall&&!o._drag&&all.length===1&&o.type==='pin'){
+    const wallTop=(o.cy<gy(0));
+    const wallBot=(o.cy>gy(ROWS-1));
+    if(wallTop){
+      // Pin hangs from top wall into outer half-cell: draw flipped at CELL/4 from top
+      ctx.translate(o.cx, CELL/4);
+      ctx.scale(1,-1);
+      draw3DPin(0,0,o.color,false);
+      ctx.restore();
+      return;
+    }
+    if(wallBot){
+      // Pin hangs from bottom wall into outer half-cell: draw flipped at FH()-CELL/4
+      ctx.translate(o.cx, FH()-CELL/4);
+      ctx.scale(1,-1);
+      draw3DPin(0,0,o.color,false);
+      ctx.restore();
+      return;
+    }
+  }
+  if(all.length===1&&o.type==='pin')  draw3DPin(dx,dy,o.color,false);
+  else if(all.length===1&&o.type==='beam') draw3DBeam(o);
+  else drawGroup3D(o);
+  ctx.restore();
+}
+
+// VEX IQ Mix & Match pin = cylindrical cup shape (wider rim, dark hollow inside)
+function draw3DPin(x,y,color,mini){
+  const R=mini?Math.max(5,CELL*.09):Math.max(9,CELL*.15);
+  const s=PC[color]||PC.red;
+  const rimRx=R, rimRy=R*.38;   // top rim ellipse
+  const bodyH=R*.85;             // visible cylinder height
+  const botY=y+bodyH;
+
+  // Ground shadow
+  ctx.fillStyle='rgba(0,0,0,.22)';
+  ctx.beginPath();ctx.ellipse(x+R*.12,botY+R*.12,R*.78,R*.27,0,0,Math.PI*2);ctx.fill();
+
+  // Cylinder side walls
+  const sideG=ctx.createLinearGradient(x-rimRx,y,x+rimRx,y);
+  sideG.addColorStop(0,s.d);
+  sideG.addColorStop(.18,s.b);
+  sideG.addColorStop(.5,lighten(s.b,.3));
+  sideG.addColorStop(.82,s.b);
+  sideG.addColorStop(1,s.d);
+  ctx.fillStyle=sideG;
+  ctx.beginPath();
+  ctx.moveTo(x-rimRx,y);
+  ctx.lineTo(x-rimRx*.88,botY);
+  ctx.ellipse(x,botY,rimRx*.88,rimRy*.6,0,0,Math.PI);
+  ctx.lineTo(x+rimRx,y);
+  ctx.closePath();ctx.fill();
+
+  // Bottom ellipse (closed base)
+  const botG=ctx.createRadialGradient(x,botY,0,x,botY,rimRx*.85);
+  botG.addColorStop(0,s.b);botG.addColorStop(1,s.d);
+  ctx.fillStyle=botG;
+  ctx.beginPath();ctx.ellipse(x,botY,rimRx*.88,rimRy*.6,0,0,Math.PI*2);ctx.fill();
+
+  // Top rim (outer ellipse)
+  const rimG=ctx.createLinearGradient(x-rimRx,y-rimRy,x-rimRx,y+rimRy);
+  rimG.addColorStop(0,lighten(s.b,.55));rimG.addColorStop(.5,s.b);rimG.addColorStop(1,s.d);
+  ctx.fillStyle=rimG;
+  ctx.beginPath();ctx.ellipse(x,y,rimRx,rimRy,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=s.d;ctx.lineWidth=mini?.7:1;
+  ctx.beginPath();ctx.ellipse(x,y,rimRx,rimRy,0,0,Math.PI*2);ctx.stroke();
+
+  // Dark inner cup cavity
+  ctx.fillStyle='#080808';
+  ctx.beginPath();ctx.ellipse(x,y,rimRx*.62,rimRy*.55,0,0,Math.PI*2);ctx.fill();
+
+  // Inner cavity highlight (subtle 3D depth)
+  ctx.fillStyle='rgba(255,255,255,.08)';
+  ctx.beginPath();ctx.ellipse(x-rimRx*.16,y-rimRy*.18,rimRx*.22,rimRy*.15,0,0,Math.PI);ctx.fill();
+
+  // Top rim shine
+  ctx.fillStyle='rgba(255,255,255,.38)';
+  ctx.beginPath();ctx.ellipse(x-rimRx*.28,y-rimRy*.3,rimRx*.25,rimRy*.14,0,0,Math.PI*2);ctx.fill();
+}
+
+// Beam = gray dumbbell with two cup-shaped receptacles (pins can go in)
+function draw3DBeam(o){
+  const BL=ip(11),BW=ip(3.5),hR=ip(4.2)/2,depth=BW*.25;
+  const isH=o.orient==='h';
+  const h1={x:isH?o.cx-BL/2+hR:o.cx, y:isH?o.cy:o.cy-BL/2+hR};
+  const h2={x:isH?o.cx+BL/2-hR:o.cx, y:isH?o.cy:o.cy+BL/2-hR};
+
+  // Drop shadow
+  ctx.fillStyle='rgba(0,0,0,.32)';
+  ctx.beginPath();ctx.ellipse(h1.x+depth,h1.y+depth*1.5,hR,hR*.38,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(h2.x+depth,h2.y+depth*1.5,hR,hR*.38,0,0,Math.PI*2);ctx.fill();
+  if(isH) ctx.fillRect(h1.x+depth,h1.y-BW/2+depth*1.5,h2.x-h1.x,BW*.5);
+  else    ctx.fillRect(h1.x-BW/2+depth,h1.y+depth*1.5,BW*.5,h2.y-h1.y);
+
+  // Connecting bridge bar
+  const barG=ctx.createLinearGradient(isH?h1.x:h1.x-BW/2,isH?h1.y-BW/2:h1.y,isH?h1.x:h1.x+BW/2,isH?h1.y+BW/2:h1.y);
+  barG.addColorStop(0,'#888');barG.addColorStop(.35,'#777');barG.addColorStop(.5,'#aaa');barG.addColorStop(.65,'#777');barG.addColorStop(1,'#444');
+  ctx.fillStyle=barG;
+  if(isH) ctx.fillRect(h1.x,h1.y-BW/2,h2.x-h1.x,BW);
+  else    ctx.fillRect(h1.x-BW/2,h1.y,BW,h2.y-h1.y);
+
+  // Two cup-shaped receptacle heads
+  [{cx:h1.x,cy:h1.y},{cx:h2.x,cy:h2.y}].forEach(c2=>{
+    // Outer rim ellipse (top of cup)
+    const rimRx=hR, rimRy=hR*.42;
+    const cupH=hR*.7;
+    const cBot=c2.cy+cupH;
+
+    // Cup body sides
+    const sG=ctx.createLinearGradient(c2.cx-rimRx,c2.cy,c2.cx+rimRx,c2.cy);
+    sG.addColorStop(0,'#2a2a2a');sG.addColorStop(.2,'#666');sG.addColorStop(.5,'#999');sG.addColorStop(.8,'#666');sG.addColorStop(1,'#2a2a2a');
+    ctx.fillStyle=sG;
+    ctx.beginPath();
+    ctx.moveTo(c2.cx-rimRx,c2.cy);
+    ctx.lineTo(c2.cx-rimRx*.88,cBot);
+    ctx.ellipse(c2.cx,cBot,rimRx*.88,rimRy*.65,0,0,Math.PI);
+    ctx.lineTo(c2.cx+rimRx,c2.cy);
+    ctx.closePath();ctx.fill();
+
+    // Cup bottom ellipse
+    ctx.fillStyle='#444';
+    ctx.beginPath();ctx.ellipse(c2.cx,cBot,rimRx*.88,rimRy*.65,0,0,Math.PI*2);ctx.fill();
+
+    // Top rim
+    const rg=ctx.createRadialGradient(c2.cx-rimRx*.3,c2.cy-rimRy*.3,2,c2.cx,c2.cy,rimRx);
+    rg.addColorStop(0,'#aaa');rg.addColorStop(.5,'#777');rg.addColorStop(1,'#333');
+    ctx.fillStyle=rg;
+    ctx.beginPath();ctx.ellipse(c2.cx,c2.cy,rimRx,rimRy,0,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#555';ctx.lineWidth=1;
+    ctx.beginPath();ctx.ellipse(c2.cx,c2.cy,rimRx,rimRy,0,0,Math.PI*2);ctx.stroke();
+
+    // Dark inner cavity (the pin-receiving hole)
+    ctx.fillStyle='#060606';
+    ctx.beginPath();ctx.ellipse(c2.cx,c2.cy,rimRx*.60,rimRy*.54,0,0,Math.PI*2);ctx.fill();
+
+    // Inner cavity subtle highlight
+    ctx.fillStyle='rgba(255,255,255,.07)';
+    ctx.beginPath();ctx.ellipse(c2.cx-rimRx*.15,c2.cy-rimRy*.15,rimRx*.2,rimRy*.15,0,0,Math.PI);ctx.fill();
+
+    // Top rim shine
+    ctx.fillStyle='rgba(255,255,255,.22)';
+    ctx.beginPath();ctx.ellipse(c2.cx-rimRx*.28,c2.cy-rimRy*.3,rimRx*.25,rimRy*.14,0,0,Math.PI*2);ctx.fill();
+  });
+}
+
+function drawGroup3D(o){
+  const all=allMembers(o);
+  const pins=all.filter(m=>m.type==='pin');
+  const beams=all.filter(m=>m.type==='beam');
+  const hasBeam=beams.length>0;
+  const x=o.cx,y=o.cy;
+  const PR=Math.max(7,CELL*.11),VS=PR*1.9;
+  let halo='rgba(142,68,173,.3)';
+  if(hasBeam) halo='rgba(26,58,122,.4)';
+  else if([...new Set(pins.map(p=>p.color))].length>=3) halo='rgba(39,174,96,.35)';
+  else if([...new Set(pins.map(p=>p.color))].length===2) halo='rgba(230,126,34,.3)';
+  const hr2=hasBeam?Math.max(ip(7),CELL*.8):Math.max(PR*1.8,pins.length*PR*.9);
+  ctx.fillStyle=halo;ctx.beginPath();ctx.arc(x,y,hr2,0,Math.PI*2);ctx.fill();
+  if(!hasBeam){
+    const n=pins.length;
+    pins.forEach((p,i)=>{
+      const py=y+(i-(n-1)/2)*VS;
+      draw3DPin(x,py,p.color,true);
+    });
+    drawGroupBadge(x+PR*1.4,y-(n-1)/2*VS-PR*1.2,pins,beams);
+  } else {
+    // ── Layout: stem pins below beam, arm pins in receptacles
+    // stemCount controlled by user via 莖部 +/- menu buttons
+    const stemCount=Math.min(o.stemCount||0,pins.length);
+    const stemPins=pins.slice(0,stemCount);
+    const armPins=pins.slice(stemCount);           // up to 4 pins for cups
+    const leftCup=armPins.filter((_,i)=>i%2===0); // even → left cup
+    const rightCup=armPins.filter((_,i)=>i%2===1);// odd → right cup
+    const maxArm=Math.max(leftCup.length,rightCup.length);
+
+    const bs=0.72;
+    const bBL=ip(11)*bs,bBW=ip(3.5)*bs,bHR=ip(4.2)/2*bs;
+    // Beam Y-center: shift UP if there are stem pins so stem fits below
+    const stemH=stemCount>0?stemCount*VS+PR*.8:0;
+    const bh1y=y-stemH/2, bh2y=bh1y;
+    const bh1x=x-bBL/2+bHR, bh2x=x+bBL/2-bHR;
+
+    // ── Draw stem pins BELOW beam (bottom-first = ground level)
+    if(stemCount>0){
+      stemPins.forEach((p,k)=>{
+        const py=bh1y+bBW/2+bHR*.5+PR*.9+(stemCount-1-k)*VS;
+        // Post rod connecting to beam or pin above
+        ctx.strokeStyle='#888';ctx.lineWidth=Math.max(1.5,PR*.35);
+        ctx.beginPath();
+        const rodTop=k===stemCount-1?bh1y+bBW/2:py-VS+PR*.85;
+        ctx.moveTo(x,py+PR*.8);ctx.lineTo(x,rodTop);ctx.stroke();
+        draw3DPin(x,py,p.color,true);
+      });
+      // Connecting post from top stem pin up into beam center
+      ctx.strokeStyle='#888';ctx.lineWidth=Math.max(1.5,PR*.35);
+      ctx.beginPath();
+      ctx.moveTo(x,bh1y+bBW/2);ctx.lineTo(x,bh1y+bBW*.15);ctx.stroke();
+    }
+
+    // ── Draw beam (drop shadow + bridge + cups)
+    ctx.fillStyle='rgba(0,0,0,.28)';
+    ctx.beginPath();ctx.ellipse(bh1x+2,bh1y+bHR*.5+3,bHR,bHR*.35,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(bh2x+2,bh2y+bHR*.5+3,bHR,bHR*.35,0,0,Math.PI*2);ctx.fill();
+    ctx.fillRect(bh1x+2,bh1y-bBW/2+4,bh2x-bh1x,bBW*.45);
+    const bbG=ctx.createLinearGradient(bh1x,bh1y-bBW/2,bh1x,bh1y+bBW/2);
+    bbG.addColorStop(0,'#888');bbG.addColorStop(.4,'#aaa');bbG.addColorStop(1,'#444');
+    ctx.fillStyle=bbG;ctx.fillRect(bh1x,bh1y-bBW/2,bh2x-bh1x,bBW);
+
+    [[bh1x,bh1y],[bh2x,bh2y]].forEach(([hx,hy])=>{
+      const rimRx=bHR,rimRy=bHR*.42,cupH=bHR*.7,cBot=hy+cupH;
+      const sG=ctx.createLinearGradient(hx-rimRx,hy,hx+rimRx,hy);
+      sG.addColorStop(0,'#2a2a2a');sG.addColorStop(.2,'#666');sG.addColorStop(.5,'#999');sG.addColorStop(.8,'#666');sG.addColorStop(1,'#2a2a2a');
+      ctx.fillStyle=sG;
+      ctx.beginPath();ctx.moveTo(hx-rimRx,hy);ctx.lineTo(hx-rimRx*.88,cBot);
+      ctx.ellipse(hx,cBot,rimRx*.88,rimRy*.65,0,0,Math.PI);ctx.lineTo(hx+rimRx,hy);ctx.closePath();ctx.fill();
+      ctx.fillStyle='#444';ctx.beginPath();ctx.ellipse(hx,cBot,rimRx*.88,rimRy*.65,0,0,Math.PI*2);ctx.fill();
+      const rg=ctx.createRadialGradient(hx-rimRx*.3,hy-rimRy*.3,2,hx,hy,rimRx);
+      rg.addColorStop(0,'#aaa');rg.addColorStop(.5,'#777');rg.addColorStop(1,'#333');
+      ctx.fillStyle=rg;ctx.beginPath();ctx.ellipse(hx,hy,rimRx,rimRy,0,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#555';ctx.lineWidth=1;ctx.beginPath();ctx.ellipse(hx,hy,rimRx,rimRy,0,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle='#060606';ctx.beginPath();ctx.ellipse(hx,hy,rimRx*.58,rimRy*.52,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.2)';ctx.beginPath();ctx.ellipse(hx-rimRx*.26,hy-rimRy*.28,rimRx*.22,rimRy*.13,0,0,Math.PI*2);ctx.fill();
+    });
+
+    // ── Draw arm pins in receptacles (above beam)
+    [[bh1x,bh1y,leftCup],[bh2x,bh2y,rightCup]].forEach(([hx,hy,stack])=>{
+      stack.forEach((p,k)=>{
+        const py=hy-bHR*.35-PR*1.2-k*VS;
+        ctx.strokeStyle='#888';ctx.lineWidth=Math.max(1.5,PR*.35);
+        ctx.beginPath();
+        const postTop=k===0?hy-bHR*.35:py+VS-PR*.7;
+        ctx.moveTo(hx,postTop);ctx.lineTo(hx,py+PR*.85);ctx.stroke();
+        draw3DPin(hx,py,p.color,true);
+      });
+    });
+
+    const badgeY=bh1y-bHR*.35-(maxArm-.5)*VS-PR*1.2;
+    drawGroupBadge(x+bBL/2+PR*.5,badgeY,pins,beams);
+  }
+}
+
+function drawGroupBadge(x,y,pins,beams){
+  const hasBeam=beams.length>0;
+  const cols=[...new Set(pins.map(p=>p.color))];
+  let bgC,label;
+  if(hasBeam){bgC='#1a3a7a';label='+'+(beams.length*10);}
+  else if(cols.length>=3){bgC='#1a6b2a';label='3色';}
+  else if(cols.length===2){bgC='#8b4e00';label='2色';}
+  else{bgC='#3a1a5a';label='×'+pins.length;}
+  const bR=Math.max(7,CELL*.09);
+  ctx.fillStyle=bgC;ctx.beginPath();ctx.arc(x,y,bR,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=.8;ctx.beginPath();ctx.arc(x,y,bR,0,Math.PI*2);ctx.stroke();
+  ctx.fillStyle='#fff';ctx.font='bold '+Math.max(6,bR*.8)+'px sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,x,y);
+  ctx.textAlign='left';ctx.textBaseline='alphabetic';
+}
+
+// ═══════════════════════════════════════════════════════
+// HIT TEST
+// ═══════════════════════════════════════════════════════
+function hitTest(x,y){
+  const pR=Math.max(12,CELL*.18);
+  for(let i=objs.length-1;i>=0;i--){
+    const o=objs[i];
+    const all=allMembers(o);
+    const hasBeam=all.some(m=>m.type==='beam');
+    if(o.type==='pin'&&all.length===1){
+      if(Math.hypot(x-o.cx,y-o.cy)<pR+4) return o;
+    } else if(o.type==='beam'&&all.length===1){
+      const BL=ip(11),BW=ip(3.5);
+      const isH=o.orient==='h';
+      const dw=isH?BL:BW,dh=isH?BW:BL;
+      if(x>=o.cx-dw/2-4&&x<=o.cx+dw/2+4&&y>=o.cy-dh/2-4&&y<=o.cy+dh/2+4) return o;
+    } else {
+      const hitR=hasBeam?Math.max(ip(6),CELL*.65):Math.max(pR,all.length*CELL*.14);
+      if(Math.hypot(x-o.cx,y-o.cy)<hitR) return o;
+    }
+  }
+  return null;
+}
+
+function findNear(o,rad){
+  // Return CLOSEST match within radius.
+  // Pin-pin radius must be < CELL/2 (snap grid spacing) so stacks in the same
+  // goal area at adjacent grid positions don't accidentally merge.
+  const oIsBeam=o.type==='beam'||(o.members&&o.members.some(m=>m.type==='beam'));
+  let bestDist=Infinity, bestObj=null;
+  for(const other of objs){
+    if(other===o||other._drag) continue;
+    const otherIsBeam=other.type==='beam'||(other.members&&other.members.some(m=>m.type==='beam'));
+    const r=rad||((oIsBeam||otherIsBeam)?Math.max(ip(5),CELL*0.75):Math.max(14,CELL*0.38));
+    const dist=Math.hypot(o.cx-other.cx,o.cy-other.cy);
+    if(dist<r&&dist<bestDist){bestDist=dist;bestObj=other;}
+  }
+  return bestObj;
+}
+
+// ═══════════════════════════════════════════════════════
+// COORDS
+// ═══════════════════════════════════════════════════════
+function toC(e){
+  const rect=canvas.getBoundingClientRect();
+  const sx=canvas.width/rect.width, sy=canvas.height/rect.height;
+  let src;
+  if(e.changedTouches&&e.changedTouches.length) src=e.changedTouches[0];
+  else if(e.touches&&e.touches.length) src=e.touches[0];
+  else src=e;
+  return {x:(src.clientX-rect.left)*sx, y:(src.clientY-rect.top)*sy};
+}
+
+// ═══════════════════════════════════════════════════════
+// CONTEXT MENU
+// ═══════════════════════════════════════════════════════
+const menu=document.getElementById('cmenu');
+let menuOn=false;
+
+function showMenu(e,o){
+  ctxId=o.id;
+  const near=findNear(o);
+  nearId=near?near.id:null;
+  const all=allMembers(o);
+  const hasGroup=all.length>1;
+  const hasBeam=all.some(m=>m.type==='beam');
+  const pinCount=all.filter(m=>m.type==='pin').length;
+  const sc=o.stemCount||0;
+  document.getElementById('ci-comb').style.display=near?'flex':'none';
+  document.getElementById('ci-split').style.display=hasGroup?'flex':'none';
+  // Stem controls: only for beam groups with at least 1 pin
+  document.getElementById('ci-stem-add').style.display=(hasBeam&&pinCount>0&&sc<pinCount)?'flex':'none';
+  document.getElementById('ci-stem-sub').style.display=(hasBeam&&sc>0)?'flex':'none';
+  showPinColorButtons(o);
+  const src=e.changedTouches?e.changedTouches[0]:(e.touches?e.touches[0]:e);
+  let mx=src.clientX+10, my=src.clientY-20;
+  if(mx+150>window.innerWidth) mx=src.clientX-155;
+  if(my<0) my=4;
+  menu.style.left=mx+'px'; menu.style.top=my+'px';
+  menu.classList.add('show'); menuOn=true;
+  // After rendering, clamp bottom edge
+  requestAnimationFrame(()=>{
+    const mh=menu.offsetHeight;
+    if(parseFloat(menu.style.top)+mh>window.innerHeight)
+      menu.style.top=Math.max(4,window.innerHeight-mh-8)+'px';
+  });
+}
+function hideMenu(){menu.classList.remove('show');menuOn=false;}
+
+const PIN_COLORS=['red','blue','orange'];
+const PIN_COLOR_HEX={red:'#cc2222',blue:'#2266cc',orange:'#ee6600'};
+const PIN_COLOR_NAME={red:'紅',blue:'藍',orange:'橘'};
+
+function showPinColorButtons(o){
+  const div=document.getElementById('ci-pin-colors');
+  div.innerHTML='';
+  const all=allMembers(o);
+  const hasBeam=all.some(m=>m.type==='beam');
+  const pinCount=all.filter(m=>m.type==='pin').length;
+  if(!hasBeam||pinCount===0) return;
+  const sc=o.stemCount||0;
+  const hdr=document.createElement('div');
+  hdr.style.cssText='font-size:.58rem;color:#1a3050;padding:5px 14px 2px;letter-spacing:1.5px;border-top:1px solid #0a2030;text-transform:uppercase;';
+  hdr.textContent='PIN 顏色';
+  div.appendChild(hdr);
+  let pi=0;
+  all.forEach((m,amIdx)=>{
+    if(m.type!=='pin') return;
+    const pos=pi++;
+    let label;
+    if(pos<sc){label=`莖部 ${pos+1}`;}
+    else{const ai=pos-sc;label=ai%2===0?`左杯 ${Math.floor(ai/2)+1}`:`右杯 ${Math.floor(ai/2)+1}`;}
+    const hex=PIN_COLOR_HEX[m.color]||'#888';
+    const name=PIN_COLOR_NAME[m.color]||m.color;
+    const btn=document.createElement('div');
+    btn.className='ci';
+    btn.style.justifyContent='space-between';
+    btn.onclick=()=>cyclePinColor(amIdx);
+    btn.innerHTML=`<span style="display:flex;align-items:center;gap:6px"><span style="width:13px;height:13px;border-radius:50%;background:${hex};border:1.5px solid #fff5;display:inline-block;flex-shrink:0"></span>${label}</span><span style="font-size:.65rem;color:#aaa">${name} ▶</span>`;
+    div.appendChild(btn);
+  });
+}
+
+function cyclePinColor(amIdx){
+  const o=objs.find(x=>x.id===ctxId); if(!o) return;
+  let m;
+  if(amIdx===0){m=o;}else{m=o.members[amIdx-1];}
+  if(!m) return;
+  const ci=PIN_COLORS.indexOf(m.color);
+  m.color=PIN_COLORS[(ci+1)%PIN_COLORS.length];
+  showPinColorButtons(o);
+  calcScore();drawScene();
+}
+
+function doAction(a){
+  hideMenu();
+  const o=objs.find(x=>x.id===ctxId); if(!o) return;
+  if(a==='combine'){
+    const t=objs.find(x=>x.id===nearId); if(!t) return;
+    o.members=[...o.members,{type:t.type,color:t.color},...t.members];
+    objs=objs.filter(x=>x!==t);
+  } else if(a==='split'){
+    if(o.members.length>0){
+      const last=o.members.pop();
+      const newO={id:mkId(),type:last.type,color:last.color,cx:o.cx+CELL*.35,cy:o.cy-CELL*.2,members:[]};
+      if(last.type==='beam'){newO.orient='h';newO.len=1;}
+      // Reduce stemCount if it exceeds remaining pin count
+      const remainPins=allMembers(o).filter(m=>m.type==='pin').length;
+      if((o.stemCount||0)>remainPins) o.stemCount=Math.max(0,remainPins);
+      objs.push(newO);
+    }
+  } else if(a==='stemAdd'){
+    const pinCount=allMembers(o).filter(m=>m.type==='pin').length;
+    o.stemCount=Math.min(pinCount,(o.stemCount||0)+1);
+  } else if(a==='stemSub'){
+    o.stemCount=Math.max(0,(o.stemCount||0)-1);
+  } else if(a==='delete'){
+    objs=objs.filter(x=>x!==o);
+  }
+  o._drag=false;pObj=null;isDrag=false;
+  calcScore();drawScene();
+}
+
+// ═══════════════════════════════════════════════════════
+// IMPORT
+// ═══════════════════════════════════════════════════════
+function toggleImp(type,color){
+  const key='i_'+type+'_'+color;
+  if(impMode&&impMode.type===type&&impMode.color===color){
+    impMode=null;canvas.style.cursor='default';
+    document.querySelectorAll('.ipin,.ibeam').forEach(el=>el.classList.remove('sel'));
+    return;
+  }
+  // Turn off draw tools when importing
+  drawMode=false;eraseMode=false;
+  document.getElementById('btn-pen').className='tool-btn';
+  document.getElementById('btn-era').className='tool-btn';
+  impMode={type,color};canvas.style.cursor='crosshair';
+  document.querySelectorAll('.ipin,.ibeam').forEach(el=>el.classList.remove('sel'));
+  const el=document.getElementById(key);if(el) el.classList.add('sel');
+  hideMenu();
+}
+
+function placeImp(x,y){
+  const snapU=CELL/2, base=CELL/2;
+  const cx=Math.max(gx(0),Math.min(gx(COLS-1),base+Math.round((x-base)/snapU)*snapU));
+  const cy=Math.max(gy(0),Math.min(gy(ROWS-1),base+Math.round((y-base)/snapU)*snapU));
+  const o=impMode.type==='pin'
+    ?{id:mkId(),type:'pin',color:impMode.color,cx,cy,members:[]}
+    :{id:mkId(),type:'beam',color:'gray',cx,cy,orient:'h',len:1,members:[]};
+  objs.push(o);
+  impMode=null;canvas.style.cursor='default';
+  document.querySelectorAll('.ipin,.ibeam').forEach(el=>el.classList.remove('sel'));
+  calcScore();drawScene();
+}
+
+// ═══════════════════════════════════════════════════════
+// ERASE PIN (消除筆 removes objects)
+// ═══════════════════════════════════════════════════════
+function erasePinsAtPoint(x,y){
+  const R=Math.max(14,CELL*.22);
+  const before=objs.length;
+  objs=objs.filter(o=>Math.hypot(o.cx-x,o.cy-y)>=R);
+  return objs.length!==before;
+}
+
+// ═══════════════════════════════════════════════════════
+// DRAG / EVENTS
+// ═══════════════════════════════════════════════════════
+canvas.addEventListener('mousedown',onDown,{passive:false});
+canvas.addEventListener('mousemove',onMove,{passive:false});
+canvas.addEventListener('mouseup',  onUp,  {passive:false});
+canvas.addEventListener('touchstart',onDown,{passive:false});
+canvas.addEventListener('touchmove', onMove,{passive:false});
+canvas.addEventListener('touchend',  onUp,  {passive:false});
+canvas.addEventListener('mouseleave',()=>{erasePos=null;drawScene();});
+
+function onDown(e){
+  e.preventDefault();
+  if(menuOn){hideMenu();return;}
+  const{x,y}=toC(e);
+
+  // Draw mode
+  if(drawMode){
+    curPath={pts:[{x,y}],color:drawColor,w:drawW};
+    return;
+  }
+
+  // Erase mode — erase paths AND pins under cursor
+  if(eraseMode){
+    // Erase drawn paths
+    const R=Math.max(14,CELL*.22);
+    paths=paths.filter(p=>!p.pts.some(pt=>Math.hypot(pt.x-x,pt.y-y)<R));
+    // Erase pin objects
+    erasePinsAtPoint(x,y);
+    calcScore();drawScene();
+    isErasing=true;
+    return;
+  }
+
+  if(impMode){placeImp(x,y);return;}
+  const o=hitTest(x,y);
+  if(o){
+    pObj=o;isDrag=false;
+    dSX=x;dSY=y;dOffX=x-o.cx;dOffY=y-o.cy;
+    objs=objs.filter(oo=>oo!==o);objs.push(o);
+  }
+}
+
+function onMove(e){
+  e.preventDefault();
+  const{x,y}=toC(e);
+
+  if(drawMode&&curPath){
+    curPath.pts.push({x,y});
+    drawScene();
+    return;
+  }
+
+  if(eraseMode){
+    erasePos={x,y};
+    if(isErasing){
+      const R=Math.max(14,CELL*.22);
+      paths=paths.filter(p=>!p.pts.some(pt=>Math.hypot(pt.x-x,pt.y-y)<R));
+      erasePinsAtPoint(x,y);
+      calcScore();
+    }
+    drawScene();
+    return;
+  }
+
+  if(!pObj) return;
+  if(!isDrag&&Math.hypot(x-dSX,y-dSY)>DRAG_T){
+    isDrag=true;pObj._drag=true;canvas.style.cursor='grabbing';
+  }
+  if(isDrag){
+    pObj.cx=x-dOffX;pObj.cy=y-dOffY;
+    const snapTarget=findNear(pObj);
+    nearId=snapTarget?snapTarget.id:null;
+    // Magnet snap: visually pull dragged object toward target
+    if(snapTarget){
+      const dx=snapTarget.cx-pObj.cx, dy=snapTarget.cy-pObj.cy;
+      const dist=Math.hypot(dx,dy);
+      if(dist>0){
+        const pull=Math.min(0.45,((CELL*1.2-dist)/(CELL*1.2))*0.6);
+        pObj.cx+=dx*pull;pObj.cy+=dy*pull;
+      }
+    }
+    drawScene();
+  }
+}
+
+function onUp(e){
+  e.preventDefault();
+  const{x,y}=toC(e);
+
+  if(drawMode&&curPath){
+    if(curPath.pts.length>1) paths.push(curPath);
+    curPath=null;
+    drawScene();
+    return;
+  }
+
+  if(eraseMode){
+    isErasing=false;
+    return;
+  }
+
+  if(!pObj) return;
+  if(isDrag){
+    pObj._drag=false;canvas.style.cursor='default';
+    // If a wall preload has been moved away from the wall, clear its wall flag
+    if(pObj.wall){
+      const atTop=pObj.cy<=gy(0)+CELL*.6;
+      const atBot=pObj.cy>=gy(ROWS-1)-CELL*.6;
+      if(!atTop&&!atBot) pObj.wall=false;
+    }
+    const near=findNear(pObj);
+    if(near){
+      // Auto-combine: drag to another object to merge directly
+      near.members=[...near.members,{type:pObj.type,color:pObj.color},...pObj.members];
+      objs=objs.filter(o=>o!==pObj);
+      nearId=null;
+      calcScore();drawScene();
+    } else {
+      snapGrid(pObj);calcScore();drawScene();
+    }
+  } else {
+    // Single tap/click → show menu (split / delete / manual combine)
+    showMenu(e,pObj);
+  }
+  isDrag=false;pObj=null;
+}
+
+function snapGrid(o){
+  const snapU=CELL/2, base=CELL/2;
+  o.cx=Math.max(gx(0),Math.min(gx(COLS-1),base+Math.round((o.cx-base)/snapU)*snapU));
+  o.cy=Math.max(gy(0),Math.min(gy(ROWS-1),base+Math.round((o.cy-base)/snapU)*snapU));
+}
+
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#cmenu')&&!e.target.closest('#fc')) hideMenu();
+});
+
+// ═══════════════════════════════════════════════════════
+// FIELD SWITCH / RESET
+// ═══════════════════════════════════════════════════════
+function switchField(f){
+  field=f;
+  document.querySelectorAll('.tb').forEach((b,i)=>b.classList.toggle('active',(i===0&&f==='tw')||(i===1&&f==='sk')));
+  document.getElementById('flbl').textContent=f==='tw'?'TEAMWORK CHALLENGE':'SKILLS CHALLENGE';
+  resetField();
+}
+
+function resetField(){
+  pObj=null;isDrag=false;nearId=null;impMode=null;
+  document.querySelectorAll('.ipin,.ibeam').forEach(el=>el.classList.remove('sel'));
+  canvas.style.cursor=drawMode?'crosshair':eraseMode?'none':'default';
+  hideMenu();paths=[];curPath=null;
+  initObjs(field);calcScore();drawScene();
+}
+
+// ═══════════════════════════════════════════════════════
+// BOOTSTRAP
+// ═══════════════════════════════════════════════════════
+window.addEventListener('resize',()=>{fitCanvas();calcScore();drawScene();});
+fitCanvas();calcScore();drawScene();
+</script>
+</body>
+</html>
