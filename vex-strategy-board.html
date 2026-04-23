@@ -277,8 +277,10 @@ function initObjs(f){
     const cy=r<0?0:r>=ROWS?FH():gy(r);
     objs.push({id:mkId(),type:'pin',color:col,cx:gx(c),cy,members:[],wall});
   });
-  beams.forEach(([c,r,col,ori,len])=>{
-    objs.push({id:mkId(),type:'beam',color:col,cx:gx(c),cy:gy(r),orient:ori,len,members:[]});
+  beams.forEach(([c,r,col,ori,sc])=>{
+    const sc0=sc||0;
+    const members=Array.from({length:sc0},()=>({type:'pin',color:'orange'}));
+    objs.push({id:mkId(),type:'beam',color:col,cx:gx(c),cy:gy(r),orient:ori,len:1,stemCount:sc0,members});
   });
 }
 
