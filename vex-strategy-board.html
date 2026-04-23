@@ -185,15 +185,13 @@ body{background:#0a0e18;color:#fff;font-family:-apple-system,BlinkMacSystemFont,
 const FD = {
   tw_pins:[
     // ── Top wall preload pins (Starting Pin Supports on far wall)
-    // OPPOSITE color of adjacent goal: Blue SQ top-left → RED; Red SQ top-right → BLUE
-    // Position: col 3 (Red) and col 6 (Blue) per Appendix A5; r=-1 = top wall
-    [3,-1,'red'],
-    [6,-1,'blue'],
+    // Symmetric around field center (col 3.5): col 2 (Red) and col 5 (Blue)
+    [2,-1,'red'],
+    [5,-1,'blue'],
     // ── Bottom wall preload pins (Starting Pin Supports on audience near wall)
-    // OPPOSITE color of adjacent goal: Red TRI bottom-left → BLUE; Blue TRI bottom-right → RED
-    // Position: col 4 (Blue) and col 5 (Red); r=ROWS=6 = bottom wall
-    [4,6,'blue'],
-    [5,6,'red'],
+    // Symmetric around field center: col 3 (Blue) and col 4 (Red)
+    [3,6,'blue'],
+    [4,6,'red'],
     // ── Starting Red field pins (3) — left side per official field diagram
     [3,0,'red'],
     [1,2,'red'],
@@ -210,16 +208,16 @@ const FD = {
     [2,4,'orange'],[4,4,'orange'],[6,4,'orange'],
   ],
   tw_beams:[
-    // Beams: x=12.5" and x=48.5" from field edge per Appendix A4; row 1 = 2nd interior line
+    // Beams: left side (col 2) and right side (col 6), both at row 1
     [2,1,'gray','h',1],
     [6,1,'gray','h',1],
   ],
   sk_pins:[
     // Skills: same field pin configuration as Teamwork per official game manual
-    [3,-1,'red'],
-    [6,-1,'blue'],
-    [4,6,'blue'],
-    [5,6,'red'],
+    [2,-1,'red'],
+    [5,-1,'blue'],
+    [3,6,'blue'],
+    [4,6,'red'],
     [3,0,'red'],
     [1,2,'red'],
     [1,4,'red'],
